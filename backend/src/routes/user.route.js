@@ -1,15 +1,34 @@
 import { Router } from "express"
-import { registerAdmin } from "../controller/admin.controller.js";
+import {
+  loggedOutAdmin,
+  getAdmin,
+  logginAdmin,
+  registerAdmin,
+  updateAdmin,
+} from "../controller/admin.controller.js";
 import { upload } from '../middleware/multer.middleware.js'
+import { verifyAdminJWT } from '../middleware/adminAuth.middleware.js'
 
 const router = Router()
 
-
-router.route("/register/admin").post(upload.fields([
+// admin router
+router.route("/admin/register").post(
+  upload.fields([
     {
-        name: 'avatar',
-        maxCount : 1
-    }
-]) ,registerAdmin);
+      name: "avatar",
+      maxCount: 2,
+    },
+  ]),
+  registerAdmin
+);
+
+router.route("/admin/login").post(logginAdmin);
+router.route("/admin/logout").post(verifyAdminJWT, loggedOutAdmin);
+router.route("/admin/:id").get(verifyAdminJWT, getAdmin);
+
+// router.route("/admin/update/:id").post(verifyAdminJWT, updateAdmin);
+
+
+
 
 export default router

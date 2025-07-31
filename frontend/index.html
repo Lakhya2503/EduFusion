@@ -4,671 +4,1027 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Registration</title>
+    <title>Premium Course Card</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #4361ee;
-            --secondary: #3f37c9;
-            --accent: #4895ef;
+            --primary: #6a11cb;
+            --secondary: #2575fc;
+            --accent: #ff4d4d;
+            --success: #38ef7d;
+            --warning: #fbb040;
+            --info: #17a2b8;
+            --dark: #2c3e50;
             --light: #f8f9fa;
-            --dark: #212529;
-            --success: #4cc9f0;
-            --danger: #f72585;
+            --text: #2d3436;
+            --text-light: #636e72;
+            --bg-gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+            --card-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            --hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
         }
 
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Poppins', sans-serif;
+            box-sizing: border-box;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
+            background: var(--bg-gradient);
             display: flex;
             justify-content: center;
             align-items: center;
+            min-height: 100vh;
             padding: 20px;
+            color: var(--text);
         }
 
-        .form-container {
-            background-color: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        .course-card {
+            width: 850px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: fadeIn 0.6s ease-out;
+            position: relative;
+        }
+
+        .course-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .course-header {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .course-thumbnail {
             width: 100%;
-            max-width: 800px;
-            padding: 40px;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .course-card:hover .course-thumbnail {
+            transform: scale(1.05);
+        }
+
+        .course-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: var(--accent);
+            color: white;
+            padding: 6px 18px;
+            border-radius: 25px;
+            font-size: 13px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(255, 77, 77, 0.3);
+            z-index: 2;
+            animation: pulse 2s infinite;
+        }
+
+        .course-content {
+            padding: 35px;
+        }
+
+        .course-title {
+            font-size: 32px;
+            color: var(--dark);
+            margin-bottom: 15px;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            display: inline-block;
+        }
+
+        .course-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--bg-gradient);
+            border-radius: 2px;
+        }
+
+        .course-description {
+            color: var(--text-light);
+            line-height: 1.7;
+            margin-bottom: 25px;
+            font-size: 15px;
+        }
+
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #e0e0e0;
+        }
+
+        .course-owner {
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+
+        .course-owner:hover {
+            transform: translateX(5px);
+        }
+
+        .owner-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            margin-right: 12px;
+            object-fit: cover;
+            border: 3px solid white;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .course-owner:hover .owner-avatar {
+            transform: rotate(10deg);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .owner-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .owner-name {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 15px;
+        }
+
+        .owner-title {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+
+        .course-stats {
+            display: flex;
+            gap: 25px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            color: var(--text-light);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .stat-item i {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+
+        .rating i {
+            color: #FFD700;
+        }
+
+        .progress-container {
+            width: 100%;
+            background-color: #f1f1f1;
+            border-radius: 10px;
+            margin: 25px 0 15px;
+            height: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 10px;
+            background: var(--bg-gradient);
+            width: 0;
+            transition: width 0.8s cubic-bezier(0.65, 0, 0.35, 1);
             position: relative;
             overflow: hidden;
         }
 
-        .form-container::before {
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg,
+                    rgba(255, 255, 255, 0) 0%,
+                    rgba(255, 255, 255, 0.3) 50%,
+                    rgba(255, 255, 255, 0) 100%);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--text-light);
+            margin-top: 8px;
+        }
+
+        .course-lessons {
+            margin-top: 35px;
+        }
+
+        .lessons-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: var(--dark);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .lessons-title i {
+            margin-right: 12px;
+            color: var(--primary);
+            font-size: 22px;
+        }
+
+        .lessons-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, var(--primary), transparent);
+            margin-left: 15px;
+            margin-top: 5px;
+        }
+
+        .lesson-list {
+            list-style: none;
+        }
+
+        .lesson-item {
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            background-color: #f8f9ff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .lesson-item:hover {
+            background-color: #edf0ff;
+            transform: translateX(5px);
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.1);
+        }
+
+        .lesson-item.locked {
+            background-color: #f5f5f5;
+        }
+
+        .lesson-item.locked:hover {
+            background-color: #eeeeee;
+            border-left: 4px solid var(--text-light);
+            transform: none;
+        }
+
+        .lesson-info {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .lesson-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background: var(--bg-gradient);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 18px;
+            flex-shrink: 0;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .lesson-item:hover .lesson-icon {
+            transform: rotate(15deg);
+            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+        }
+
+        .lesson-item.locked .lesson-icon {
+            background: #cccccc;
+        }
+
+        .lesson-details {
+            flex-grow: 1;
+            min-width: 0;
+        }
+
+        .lesson-title {
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--dark);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .lesson-item:hover .lesson-title {
+            color: var(--primary);
+        }
+
+        .lesson-desc {
+            font-size: 13px;
+            color: var(--text-light);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .lesson-meta {
+            display: flex;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        .lesson-duration {
+            font-size: 12px;
+            background: rgba(106, 17, 203, 0.1);
+            color: var(--primary);
+            padding: 2px 8px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .lesson-duration i {
+            font-size: 10px;
+            margin-right: 4px;
+        }
+
+        .lesson-actions {
+            display: flex;
+            gap: 10px;
+            margin-left: 15px;
+        }
+
+        .action-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            border: none;
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn::after {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 10px;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
-        .form-header {
-            text-align: center;
-            margin-bottom: 30px;
+        .action-btn:hover::after {
+            opacity: 1;
         }
 
-        .form-header h1 {
+        .action-btn i {
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .action-btn:hover i {
+            transform: scale(1.1);
+        }
+
+        .video-btn {
             color: var(--primary);
-            margin-bottom: 10px;
-            font-weight: 600;
-            font-size: 2rem;
         }
 
-        .form-header p {
-            color: #6c757d;
-            font-size: 1rem;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .form-row .form-group {
-            flex: 1;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--dark);
-            font-size: 0.9rem;
-        }
-
-        .input-container {
-            position: relative;
-        }
-
-        .input-container i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--primary);
-            font-size: 1rem;
-        }
-
-        input,
-        select,
-        textarea {
-            width: 100%;
-            padding: 12px 15px 12px 40px;
-            border: 1px solid #ced4da;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            transition: all 0.3s;
-            background-color: #f8f9fa;
-        }
-
-        .input-container.no-icon input,
-        .input-container.no-icon select,
-        .input-container.no-icon textarea {
-            padding-left: 15px;
-        }
-
-        textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        input:focus,
-        select:focus,
-        textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
-            background-color: white;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
-            border: none;
-        }
-
-        .btn-primary {
+        .video-btn:hover {
             background-color: var(--primary);
             color: white;
-            width: 100%;
         }
 
-        .btn-primary:hover {
-            background-color: var(--secondary);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        .pdf-btn {
+            color: var(--accent);
         }
 
-        .avatar-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .avatar-preview {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background-color: #e9ecef;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            margin-bottom: 15px;
-            border: 3px solid var(--primary);
-            position: relative;
-        }
-
-        .avatar-preview img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .avatar-upload {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .upload-btn {
+        .pdf-btn:hover {
             background-color: var(--accent);
             color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 5px;
         }
 
-        .upload-btn:hover {
-            background-color: var(--primary);
+        .docs-btn {
+            color: var(--success);
         }
 
-        .upload-btn i {
-            font-size: 0.9rem;
-        }
-
-        .file-name {
-            font-size: 0.8rem;
-            color: #6c757d;
-            margin-top: 5px;
-            display: none;
-        }
-
-        .interests-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .interest-checkbox {
-            display: none;
-        }
-
-        .interest-label {
-            display: inline-block;
-            padding: 8px 15px;
-            background-color: #e9ecef;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.85rem;
-        }
-
-        .interest-checkbox:checked+.interest-label {
-            background-color: var(--primary);
+        .docs-btn:hover {
+            background-color: var(--success);
             color: white;
         }
 
-        /* Password strength indicator */
-        .password-strength {
-            height: 5px;
-            background: #e9ecef;
-            border-radius: 5px;
-            margin-top: 5px;
-            overflow: hidden;
+        .locked-btn {
+            color: var(--text-light);
+            cursor: not-allowed;
         }
 
-        .strength-meter {
-            height: 100%;
-            width: 0;
-            background: #dc3545;
-            transition: all 0.3s;
+        .locked-btn:hover {
+            background-color: #e0e0e0;
+            transform: none !important;
         }
 
-        .password-requirements {
-            margin-top: 5px;
-            font-size: 0.75rem;
-            color: #6c757d;
+        .course-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 35px;
+            background: linear-gradient(to right, #f8f9ff, #f0f2ff);
+            border-top: 1px solid #e0e0ff;
         }
 
-        .requirement {
+        .course-price {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
             display: flex;
             align-items: center;
-            margin-bottom: 3px;
         }
 
-        .requirement i {
-            margin-right: 5px;
-            font-size: 0.6rem;
+        .original-price {
+            font-size: 18px;
+            color: var(--text-light);
+            text-decoration: line-through;
+            margin-right: 12px;
         }
 
-        .requirement.valid i {
-            color: #28a745;
-        }
-
-        /* Toggle password visibility */
-        .toggle-password {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
+        .enroll-btn {
+            padding: 14px 35px;
+            background: var(--bg-gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
             cursor: pointer;
-            color: #6c757d;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 20px rgba(106, 17, 203, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
         }
 
-        .toggle-password:hover {
+        .enroll-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.4s ease;
+        }
+
+        .enroll-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(106, 17, 203, 0.4);
+        }
+
+        .enroll-btn:hover::before {
+            opacity: 1;
+        }
+
+        .enroll-btn i {
+            margin-left: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .enroll-btn:hover i {
+            transform: translateX(3px);
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow: hidden;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            padding: 20px;
+            background: var(--bg-gradient);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .close-modal:hover {
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 25px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .resource-iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .resource-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 400px;
+            background: #f9f9ff;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .resource-placeholder i {
+            font-size: 60px;
+            margin-bottom: 20px;
             color: var(--primary);
+        }
+
+        .resource-placeholder h3 {
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .resource-placeholder p {
+            color: var(--text-light);
+            max-width: 400px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 900px) {
+            .course-card {
+                width: 95%;
+            }
         }
 
         @media (max-width: 768px) {
-            .form-row {
+            .course-content {
+                padding: 25px;
+            }
+
+            .course-meta {
                 flex-direction: column;
-                gap: 0;
+                align-items: flex-start;
             }
 
-            .form-container {
-                padding: 30px 20px;
+            .lesson-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .lesson-actions {
+                align-self: flex-end;
+            }
+
+            .course-footer {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .modal-content {
+                width: 95%;
             }
         }
 
-        /* Loading animation */
-        .loader {
-            display: none;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-            margin-left: 10px;
-        }
+        @media (max-width: 480px) {
+            .course-title {
+                font-size: 26px;
+            }
 
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
+            .lesson-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .modal-body {
+                padding: 15px;
+            }
+
+            .resource-iframe {
+                height: 300px;
             }
         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <body>
-    <div class="form-container">
-        <div class="form-header">
-            <h1>Student Registration</h1>
-            <p>Join our learning community and start your educational journey</p>
+    <div class="course-card">
+        <div class="course-header">
+            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+                alt="Course Thumbnail" class="course-thumbnail">
+            <span class="course-badge">BESTSELLER</span>
         </div>
 
-        <form id="studentForm">
-            <div class="avatar-container">
-                <div class="avatar-preview">
-                    <i class="fas fa-user-graduate" style="font-size: 3rem; color: #adb5bd;"></i>
-                </div>
-                <div class="avatar-upload">
-                    <button type="button" class="upload-btn" id="uploadBtn">
-                        <i class="fas fa-camera"></i> Upload Photo
-                    </button>
-                    <span class="file-name" id="fileName"></span>
-                    <input type="file" id="avatar" accept="image/*" style="display: none;">
-                </div>
+        <div class="course-content">
+            <h1 class="course-title">Full-Stack Web Development Masterclass</h1>
+            <p class="course-description">
+                Become a professional full-stack developer with this comprehensive bootcamp. Learn modern technologies
+                including HTML5, CSS3, JavaScript (ES6+), React, Node.js, Express, and MongoDB. Build real-world
+                projects and deploy them to production.
+            </p>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="progress-text">
+                <span>Your progress</span>
+                <span id="progressText">0</span>%
             </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="firstName">First Name</label>
-                    <div class="input-container">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="firstName" required placeholder="Enter first name">
+            <div class="course-meta">
+                <div class="course-owner">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Instructor" class="owner-avatar">
+                    <div class="owner-info">
+                        <span class="owner-name">Dr. Sarah Johnson</span>
+                        <span class="owner-title">Senior Developer & Instructor</span>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="lastName">Last Name</label>
-                    <div class="input-container">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="lastName" required placeholder="Enter last name">
-                    </div>
-                </div>
-            </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <div class="input-container">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" id="email" required placeholder="Enter email address">
+                <div class="course-stats">
+                    <div class="stat-item rating">
+                        <i class="fas fa-star"></i> 4.9 (1,024 reviews)
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <div class="input-container">
-                        <i class="fas fa-phone"></i>
-                        <input type="tel" id="phone" placeholder="Enter phone number">
+                    <div class="stat-item">
+                        <i class="fas fa-users"></i> 8,456 students
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-clock"></i> 42 hours
                     </div>
                 </div>
             </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <div class="input-container">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="password" required placeholder="Create password">
-                        <i class="fas fa-eye toggle-password" id="togglePassword"></i>
-                    </div>
-                    <div class="password-strength">
-                        <div class="strength-meter" id="strengthMeter"></div>
-                    </div>
-                    <div class="password-requirements">
-                        <div class="requirement" id="lengthReq">
-                            <i class="far fa-circle"></i>
-                            <span>At least 8 characters</span>
+            <div class="course-lessons">
+                <h3 class="lessons-title"><i class="fas fa-laptop-code"></i> Course Curriculum</h3>
+
+                <ul class="lesson-list">
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <div class="lesson-icon">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="lesson-details">
+                                <h4 class="lesson-title">Introduction to Full-Stack Development</h4>
+                                <p class="lesson-desc">Course overview, environment setup, and tools installation</p>
+                                <div class="lesson-meta">
+                                    <span class="lesson-duration"><i class="fas fa-clock"></i> 32 min</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="requirement" id="numberReq">
-                            <i class="far fa-circle"></i>
-                            <span>Contains a number</span>
+                        <div class="lesson-actions">
+                            <button class="action-btn video-btn"
+                                onclick="openResource('video', 'Introduction Video', 'https://www.youtube.com/embed/dQw4w9WgXcQ')">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <button class="action-btn pdf-btn"
+                                onclick="openResource('pdf', 'Introduction PDF', 'https://example.com/sample.pdf')">
+                                <i class="fas fa-file-pdf"></i>
+                            </button>
+                            <button class="action-btn docs-btn"
+                                onclick="openResource('docs', 'Setup Documentation', 'https://example.com/docs')">
+                                <i class="fas fa-file-alt"></i>
+                            </button>
                         </div>
-                        <div class="requirement" id="specialReq">
-                            <i class="far fa-circle"></i>
-                            <span>Contains a special character</span>
+                    </li>
+
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <div class="lesson-icon">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="lesson-details">
+                                <h4 class="lesson-title">Advanced JavaScript Concepts</h4>
+                                <p class="lesson-desc">Master closures, promises, async/await, and modern JS patterns
+                                </p>
+                                <div class="lesson-meta">
+                                    <span class="lesson-duration"><i class="fas fa-clock"></i> 1h 15min</span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="confirmPassword">Confirm Password</label>
-                    <div class="input-container">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="confirmPassword" required placeholder="Confirm password">
-                        <i class="fas fa-eye toggle-password" id="toggleConfirmPassword"></i>
-                    </div>
-                    <div id="passwordMatch" style="font-size: 0.75rem; color: #dc3545; margin-top: 5px;"></div>
-                </div>
+                        <div class="lesson-actions">
+                            <button class="action-btn video-btn"
+                                onclick="openResource('video', 'JavaScript Mastery', 'https://www.youtube.com/embed/dQw4w9WgXcQ')">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <button class="action-btn pdf-btn"
+                                onclick="openResource('pdf', 'JS Cheat Sheet', 'https://example.com/js-cheatsheet.pdf')">
+                                <i class="fas fa-file-pdf"></i>
+                            </button>
+                            <button class="action-btn docs-btn"
+                                onclick="openResource('docs', 'JS Documentation', 'https://developer.mozilla.org/en-US/docs/Web/JavaScript')">
+                                <i class="fas fa-file-alt"></i>
+                            </button>
+                        </div>
+                    </li>
+
+                    <li class="lesson-item">
+                        <div class="lesson-info">
+                            <div class="lesson-icon">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="lesson-details">
+                                <h4 class="lesson-title">React Fundamentals and Hooks</h4>
+                                <p class="lesson-desc">Learn component architecture, state management, and React hooks
+                                </p>
+                                <div class="lesson-meta">
+                                    <span class="lesson-duration"><i class="fas fa-clock"></i> 2h 30min</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lesson-actions">
+                            <button class="action-btn video-btn"
+                                onclick="openResource('video', 'React Tutorial', 'https://www.youtube.com/embed/dQw4w9WgXcQ')">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <button class="action-btn pdf-btn"
+                                onclick="openResource('pdf', 'React Guide', 'https://example.com/react-guide.pdf')">
+                                <i class="fas fa-file-pdf"></i>
+                            </button>
+                            <button class="action-btn docs-btn"
+                                onclick="openResource('docs', 'React Docs', 'https://reactjs.org/docs/getting-started.html')">
+                                <i class="fas fa-file-alt"></i>
+                            </button>
+                        </div>
+                    </li>
+
+                    <li class="lesson-item locked">
+                        <div class="lesson-info">
+                            <div class="lesson-icon">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <div class="lesson-details">
+                                <h4 class="lesson-title">Node.js Backend Development</h4>
+                                <p class="lesson-desc">Build RESTful APIs with Express and MongoDB</p>
+                                <div class="lesson-meta">
+                                    <span class="lesson-duration"><i class="fas fa-clock"></i> 3h 10min</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lesson-actions">
+                            <button class="action-btn locked-btn" disabled>
+                                <i class="fas fa-lock"></i>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
             </div>
+        </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="dob">Date of Birth</label>
-                    <div class="input-container">
-                        <i class="fas fa-calendar-day"></i>
-                        <input type="date" id="dob">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="gender">Gender</label>
-                    <div class="input-container">
-                        <i class="fas fa-venus-mars"></i>
-                        <select id="gender">
-                            <option value="">Select gender</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                </div>
+        <div class="course-footer">
+            <div class="course-price">
+                <span class="original-price">$199.99</span>
+                $149.99
             </div>
-
-            <div class="form-group">
-                <label for="address">Address</label>
-                <div class="input-container">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <input type="text" id="address" placeholder="Enter street address">
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="city">City</label>
-                    <div class="input-container">
-                        <i class="fas fa-city"></i>
-                        <input type="text" id="city" placeholder="Enter city">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="zip">Zip Code</label>
-                    <div class="input-container">
-                        <i class="fas fa-mail-bulk"></i>
-                        <input type="text" id="zip" placeholder="Enter zip code">
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="school">Current School/University</label>
-                <div class="input-container">
-                    <i class="fas fa-school"></i>
-                    <input type="text" id="school" placeholder="Enter school/university name">
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="grade">Grade/Year</label>
-                    <div class="input-container">
-                        <i class="fas fa-graduation-cap"></i>
-                        <input type="text" id="grade" placeholder="Enter grade/year">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="major">Major/Field</label>
-                    <div class="input-container">
-                        <i class="fas fa-book"></i>
-                        <input type="text" id="major" placeholder="Enter major/field of study">
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Areas of Interest</label>
-                <div class="interests-container">
-                    <input type="checkbox" id="science" class="interest-checkbox">
-                    <label for="science" class="interest-label">Science</label>
-
-                    <input type="checkbox" id="math" class="interest-checkbox">
-                    <label for="math" class="interest-label">Mathematics</label>
-
-                    <input type="checkbox" id="arts" class="interest-checkbox">
-                    <label for="arts" class="interest-label">Arts</label>
-
-                    <input type="checkbox" id="sports" class="interest-checkbox">
-                    <label for="sports" class="interest-label">Sports</label>
-
-                    <input type="checkbox" id="tech" class="interest-checkbox">
-                    <label for="tech" class="interest-label">Technology</label>
-
-                    <input type="checkbox" id="music" class="interest-checkbox">
-                    <label for="music" class="interest-label">Music</label>
-
-                    <input type="checkbox" id="language" class="interest-checkbox">
-                    <label for="language" class="interest-label">Languages</label>
-
-                    <input type="checkbox" id="history" class="interest-checkbox">
-                    <label for="history" class="interest-label">History</label>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="bio">Short Bio</label>
-                <div class="input-container no-icon">
-                    <textarea id="bio" placeholder="Tell us about yourself, your hobbies, and goals"></textarea>
-                </div>
-            </div>
-
-            <button type="submit" class="btn btn-primary" id="submitBtn">
-                Register Now
-                <div class="loader" id="loader"></div>
+            <button class="enroll-btn" onclick="enrollCourse()">
+                Enroll Now <i class="fas fa-arrow-right"></i>
             </button>
-        </form>
+        </div>
+    </div>
+
+    <!-- Resource Modal -->
+    <div class="modal" id="resourceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Resource</h3>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be inserted here -->
+            </div>
+        </div>
     </div>
 
     <script>
-        // Avatar upload preview
-        const avatarInput = document.getElementById('avatar');
-        const avatarPreview = document.querySelector('.avatar-preview');
-        const uploadBtn = document.getElementById('uploadBtn');
-        const fileName = document.getElementById('fileName');
+        // Simulate progress loading
+        document.addEventListener('DOMContentLoaded', function () {
+            let progress = 0;
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
 
-        uploadBtn.addEventListener('click', () => {
-            avatarInput.click();
+            const progressInterval = setInterval(() => {
+                progress += Math.random() * 5;
+                if (progress >= 45) {
+                    progress = 45;
+                    clearInterval(progressInterval);
+                }
+                progressBar.style.width = `${progress}%`;
+                progressText.textContent = Math.round(progress);
+            }, 200);
         });
 
-        avatarInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                fileName.textContent = file.name;
-                fileName.style.display = 'block';
+        // Modal functionality
+        function openResource(type, title, url) {
+            const modal = document.getElementById('resourceModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
 
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    avatarPreview.innerHTML = `<img src="${event.target.result}" alt="Avatar Preview">`;
-                };
-                reader.readAsDataURL(file);
-            }
-        });
+            modalTitle.textContent = title;
+            modalBody.innerHTML = '';
 
-        // Password visibility toggle
-        const togglePassword = document.getElementById('togglePassword');
-        const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
-        const passwordField = document.getElementById('password');
-        const confirmPasswordField = document.getElementById('confirmPassword');
-
-        togglePassword.addEventListener('click', () => {
-            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordField.setAttribute('type', type);
-            togglePassword.classList.toggle('fa-eye');
-            togglePassword.classList.toggle('fa-eye-slash');
-        });
-
-        toggleConfirmPassword.addEventListener('click', () => {
-            const type = confirmPasswordField.getAttribute('type') === 'password' ? 'text' : 'password';
-            confirmPasswordField.setAttribute('type', type);
-            toggleConfirmPassword.classList.toggle('fa-eye');
-            toggleConfirmPassword.classList.toggle('fa-eye-slash');
-        });
-
-        // Password strength checker
-        passwordField.addEventListener('input', function () {
-            const password = this.value;
-            const strengthMeter = document.getElementById('strengthMeter');
-            const lengthReq = document.getElementById('lengthReq');
-            const numberReq = document.getElementById('numberReq');
-            const specialReq = document.getElementById('specialReq');
-
-            // Reset requirements
-            lengthReq.querySelector('i').className = 'far fa-circle';
-            numberReq.querySelector('i').className = 'far fa-circle';
-            specialReq.querySelector('i').className = 'far fa-circle';
-
-            let strength = 0;
-
-            // Check length
-            if (password.length >= 8) {
-                strength += 1;
-                lengthReq.querySelector('i').className = 'fas fa-check-circle valid';
+            switch (type) {
+                case 'video':
+                    modalBody.innerHTML = `
+                        <iframe class="resource-iframe" src="${url}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <p style="margin-top: 15px; text-align: center; color: var(--text-light);">Video tutorial: ${title}</p>
+                    `;
+                    break;
+                case 'pdf':
+                    modalBody.innerHTML = `
+                        <div class="resource-placeholder">
+                            <i class="fas fa-file-pdf"></i>
+                            <h3>PDF Document</h3>
+                            <p>This would display the PDF viewer in a real implementation. For this demo, we're showing a placeholder.</p>
+                            <p style="margin-top: 15px;"><a href="${url}" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: 600;">Open PDF in new tab</a></p>
+                        </div>
+                    `;
+                    break;
+                case 'docs':
+                    modalBody.innerHTML = `
+                        <iframe class="resource-iframe" src="${url}" frameborder="0"></iframe>
+                        <p style="margin-top: 15px; text-align: center; color: var(--text-light);">Documentation: ${title}</p>
+                    `;
+                    break;
+                default:
+                    modalBody.innerHTML = `
+                        <div class="resource-placeholder">
+                            <i class="fas fa-file-alt"></i>
+                            <h3>Resource Content</h3>
+                            <p>This would display the actual resource content in a real implementation.</p>
+                        </div>
+                    `;
             }
 
-            // Check for numbers
-            if (/\d/.test(password)) {
-                strength += 1;
-                numberReq.querySelector('i').className = 'fas fa-check-circle valid';
-            }
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
 
-            // Check for special characters
-            if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-                strength += 1;
-                specialReq.querySelector('i').className = 'fas fa-check-circle valid';
-            }
+        function closeModal() {
+            const modal = document.getElementById('resourceModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
 
-            // Update strength meter
-            const strengthPercent = (strength / 3) * 100;
-            strengthMeter.style.width = `${strengthPercent}%`;
-
-            // Update color based on strength
-            if (strengthPercent < 40) {
-                strengthMeter.style.backgroundColor = '#dc3545'; // Red
-            } else if (strengthPercent < 80) {
-                strengthMeter.style.backgroundColor = '#fd7e14'; // Orange
-            } else {
-                strengthMeter.style.backgroundColor = '#28a745'; // Green
+        // Close modal when clicking outside
+        window.addEventListener('click', function (event) {
+            const modal = document.getElementById('resourceModal');
+            if (event.target === modal) {
+                closeModal();
             }
         });
 
-        // Password confirmation check
-        confirmPasswordField.addEventListener('input', function () {
-            const passwordMatch = document.getElementById('passwordMatch');
-            if (this.value !== passwordField.value) {
-                passwordMatch.textContent = 'Passwords do not match';
-                passwordMatch.style.color = '#dc3545';
-            } else {
-                passwordMatch.textContent = 'Passwords match';
-                passwordMatch.style.color = '#28a745';
-            }
-        });
+        // Enroll button functionality
+        function enrollCourse() {
+            alert('Enrollment successful! Redirecting to payment...');
+            // In a real implementation, this would redirect to payment or enrollment page
+        }
 
-        // Form submission with loading animation
-        document.getElementById('studentForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            // Validate password match
-            if (passwordField.value !== confirmPasswordField.value) {
-                alert('Passwords do not match!');
-                return;
-            }
-
-            const submitBtn = document.getElementById('submitBtn');
-            const loader = document.getElementById('loader');
-
-            // Show loading animation
-            submitBtn.disabled = true;
-            loader.style.display = 'inline-block';
-
-            // Simulate form submission (replace with actual API call)
-            await new Promise(resolve => setTimeout(resolve, 2000));
-
-            // Hide loading animation
-            submitBtn.disabled = false;
-            loader.style.display = 'none';
-
-            // Show success message
-            alert('Registration successful! Welcome to our learning community.');
+        // Add hover effect to lesson items
+        const lessonItems = document.querySelectorAll('.lesson-item:not(.locked)');
+        lessonItems.forEach(item => {
+            item.addEventListener('mouseenter', function () {
+                const icon = this.querySelector('.lesson-icon i');
+                if (icon) {
+                    icon.classList.add('fa-bounce');
+                    setTimeout(() => {
+                        icon.classList.remove('fa-bounce');
+                    }, 1000);
+                }
+            });
         });
     </script>
 </body>

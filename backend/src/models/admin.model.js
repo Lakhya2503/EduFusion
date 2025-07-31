@@ -33,8 +33,6 @@ const adminSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ["admin", "subadmin"],
-      default: "subadmin",
     },
     refreshToken: {
       type: String,
@@ -52,11 +50,11 @@ adminSchema.pre("save", async function (next) {
 
 
 adminSchema.methods.isPasswordValid = async function (password) {
-    return await compare(password.this.password)
+    return await compare(password,this.password)
 }
 
 adminSchema.methods.genrateAccessToken = async function () {
-    return jwt.sign(
+    return  jwt.sign(
       {
         _id: this._id,
         email: this.email,

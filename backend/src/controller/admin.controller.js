@@ -5,6 +5,31 @@ import { Admin } from '../models/admin.model.js'
 import { fileupload } from '../utils/cloudinary.js'
 
 
+const options = {
+    httpOnly: true,
+    secure : true
+}
+
+const genrateAccesstokenAndRefreshToken = async function (adminId) {
+    const admin = await Admin.findById(adminId);
+
+    const accessToken = await admin.genrateAccessToken()
+    const refreshToken = await admin.genrateRefreshToken()
+
+    admin.accessToken = accessToken
+    admin.refreshToken = refreshToken
+
+    admin.save({
+        validateBeforeSave : false
+    })
+
+    return {
+        accessToken,
+        refreshToken
+    }
+
+}
+
 
 const registerAdmin = asyncHandler(async (req, res) => {
 
@@ -60,7 +85,115 @@ const registerAdmin = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, {"user": createdAdmin},"ok"))
 });
 
+const logginAdmin = asyncHandler(async (req, res) => {
+    const { username, email, password } = req.body
+    console.log(`username : ${username}, email : ${email}, password : ${password}`);
+    
+    if (!(username || email)) {
+        throw new ApiError(404, "email or username are required")
+    }
+
+    
+    const admin = await Admin.findOne({
+        $or : [ { username }, { email }]
+    })
+
+    if (!password) {
+        throw new ApiError(404, "password must be included")
+    }
+    
+    const isPassowrdCorrect = await admin.isPasswordValid(password);
+
+    console.log(`isPassowrdCorrect : ${isPassowrdCorrect}`);
+
+    if (!isPassowrdCorrect) {
+      throw new ApiError(404, "Please check the password once");
+    }
+
+    const loggedInAdmin = await Admin.findById(admin._id).select(
+      "-password -refreshToken"
+    );
+
+    if (!loggedInAdmin) {
+      throw new ApiError(404, "loggedI");
+    }
+
+   const { refreshToken, accessToken } = await genrateAccesstokenAndRefreshToken(admin._id)
+
+
+    return res
+        .status(200)
+         .cookie("refreshToken", refreshToken, options)
+        .cookie("accessToken", accessToken, options)
+        .json(
+        new ApiResponse(
+          200,
+          { loggedAdmin: loggedInAdmin, refreshToken, accessToken },
+          "user loggedIn successFully"
+        )
+      )
+      
+})
+
+const loggedOutAdmin = asyncHandler(async (req,res) => {
+     await Admin.findByIdAndUpdate(req.admin._id, {
+      $unset: {
+        refreshToken: 1,
+      },
+    },
+        {
+            new : true
+        }
+    );
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, {}, "admin loggedOut successFully"));
+})
+
+const getAdmin = asyncHandler(async (req, res) => {
+    console.log(req.params?.id);
+    
+    const admin = await Admin.findById(req.params?.id).select("-password -refreshToken")
+
+    if (!admin) {
+        throw new ApiError(404, "User not found")
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, { admin: admin }, "User fetch successfully"))
+})
+
+// const updateAdmin = asyncHandler(async (req, res) => {
+
+//     const adminUpdate = await Admin.findByIdAndUpdate(req.params?._id, req.body, {
+//         new : true
+//     }).select("-password -refreshToken")
+
+//     console.log(`adminUpdate : ${adminUpdate}`);
+    
+
+//     if (!adminUpdate) {
+//         throw new ApiError(400, "user not found also be filed any update: ", adminUpdate)
+//     }
+
+//     return res
+//       .status(200)
+//       .json(
+//         new ApiResponse(
+//           200,
+//           { adminUpdate: adminUpdate },
+//           "user updated successfully"
+//         )
+//       );
+// })
+
 
 export {
-    registerAdmin
-}
+    registerAdmin,
+    logginAdmin,
+    loggedOutAdmin,
+    getAdmin,
+    // updateAdmin
+};
