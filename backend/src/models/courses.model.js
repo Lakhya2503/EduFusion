@@ -1,5 +1,6 @@
 import { model, Schema } from "mongoose"
 
+
 const coureseRating = new Schema({
     star : {
         type: Schema.Types.ObjectId,
@@ -62,15 +63,17 @@ const couresesSchema = new Schema(
       ref: "Admin" || "Teacher",
       required: true,
     },
-    buyer: {
-      type: Schema.Types.ObjectId,
-      ref: "Student",
-    },
+    buyer: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Student",
+      },
+    ],
     rating: {
-      type: [coureseRating]
+      type: [coureseRating],
     },
   },
   { timestamps: true }
 );
 
-export const Coureses = model("Courses", couresesSchema)
+export const Courses = model("Courses", couresesSchema)

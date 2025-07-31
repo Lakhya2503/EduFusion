@@ -3,6 +3,7 @@ import { ApiResponse } from '../utils/ApiResponse.js'
 import { ApiError } from "../utils/ApiError.js"
 import { Admin } from '../models/admin.model.js'
 import { fileupload } from '../utils/cloudinary.js'
+import jwt from "jsonwebtoken";
 
 
 const options = {
@@ -10,7 +11,7 @@ const options = {
     secure : true
 }
 
-const genrateAccesstokenAndRefreshToken = async function (adminId) {
+const genrateAccesstokenAndRefreshToken = async (adminId)=> {
     const admin = await Admin.findById(adminId);
 
     const accessToken = await admin.genrateAccessToken()
@@ -29,7 +30,6 @@ const genrateAccesstokenAndRefreshToken = async function (adminId) {
     }
 
 }
-
 
 const registerAdmin = asyncHandler(async (req, res) => {
 
@@ -151,6 +151,34 @@ const loggedOutAdmin = asyncHandler(async (req,res) => {
       .json(new ApiResponse(200, {}, "admin loggedOut successFully"));
 })
 
+const refeshAccessToken = asyncHandler(async (req,res) => {
+    const incomingRefreshToken = req.cookies?.refreshToken
+
+    console.log(`incomming refresh Token : ${incomingRefreshToken}`);
+    
+
+    const decodedToken = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET);
+    
+    if (!decodedToken) {
+        throw new ApiError(401, "token invalid")
+    }
+
+    const admin = await Admin.findById(decodedToken._id)
+    
+    if (incomingRefreshToken !== admin?.refreshToken) {
+        throw new ApiError(400, "token used or exipred");
+    }
+    
+    const { refreshToken, accessToken } = await genrateAccesstokenAndRefreshToken(admin._id)
+
+    return res
+        .status(200)
+        .cookie(refreshToken, options)
+        .cookie(accessToken,options)
+        .json(new ApiResponse(200, { accessToken, refreshToken }))
+
+})
+
 const getAdmin = asyncHandler(async (req, res) => {
     console.log(req.params?.id);
     
@@ -165,35 +193,41 @@ const getAdmin = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, { admin: admin }, "User fetch successfully"))
 })
 
-// const updateAdmin = asyncHandler(async (req, res) => {
+const passwordUpdate = asyncHandler(async (req, res) => {
+    const { oldPassword, newPassword } = req.body
 
-//     const adminUpdate = await Admin.findByIdAndUpdate(req.params?._id, req.body, {
-//         new : true
-//     }).select("-password -refreshToken")
+    const admin = await Admin.findById(req.admin._id)
 
-//     console.log(`adminUpdate : ${adminUpdate}`);
+    console.log(`admin :${admin}`);
+
+    if (!admin) {
+        throw new ApiError(404, "admin not found")
+    }
+
+    const validPassword = admin.isPasswordValid(oldPassword)
+
+    if (!validPassword) {
+        throw new ApiError(401, "check your old password")
+    }
+
+    admin.password = newPassword
+    await admin.save({ validateBeforeSave: false })
     
 
-//     if (!adminUpdate) {
-//         throw new ApiError(400, "user not found also be filed any update: ", adminUpdate)
-//     }
 
-//     return res
-//       .status(200)
-//       .json(
-//         new ApiResponse(
-//           200,
-//           { adminUpdate: adminUpdate },
-//           "user updated successfully"
-//         )
-//       );
-// })
+    return res
+        .status(200)
+        .json(new ApiResponse(200, { }, "password change successfully"))
+
+})
+
 
 
 export {
     registerAdmin,
     logginAdmin,
     loggedOutAdmin,
+    refeshAccessToken,
+    passwordUpdate,
     getAdmin,
-    // updateAdmin
 };

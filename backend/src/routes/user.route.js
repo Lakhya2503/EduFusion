@@ -4,7 +4,9 @@ import {
   getAdmin,
   logginAdmin,
   registerAdmin,
-  updateAdmin,
+  refeshAccessToken,
+  passwordUpdate,
+  // updateAdmin,
 } from "../controller/admin.controller.js";
 import { upload } from '../middleware/multer.middleware.js'
 import { verifyAdminJWT } from '../middleware/adminAuth.middleware.js'
@@ -25,6 +27,9 @@ router.route("/admin/register").post(
 router.route("/admin/login").post(logginAdmin);
 router.route("/admin/logout").post(verifyAdminJWT, loggedOutAdmin);
 router.route("/admin/:id").get(verifyAdminJWT, getAdmin);
+router.route("/admin/refresh-token").post(verifyAdminJWT, refeshAccessToken);
+router.route("/admin/change-password").post(verifyAdminJWT, passwordUpdate);
+
 
 // router.route("/admin/update/:id").post(verifyAdminJWT, updateAdmin);
 

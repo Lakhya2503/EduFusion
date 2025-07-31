@@ -1,7 +1,8 @@
 import { Router } from 'express'
+import { createCourses } from '../controller/courses.controller.js';
 
 const router = Router()
 
-router.route('/courses/create').post(createCourses)
+router.route("/create/new").post(createCourses);
 
 export default router

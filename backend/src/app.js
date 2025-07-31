@@ -35,8 +35,14 @@ app.use(cookieParser());
 // import router
 
 import authRouter from './routes/user.route.js'
+import couresesRouter from './routes/course.route.js'
 
-app.use('/edufusion/api/v2/',authRouter)
+// users ( admin/ teacher/ student )
+app.use('/edufusion/api/v2/users', authRouter)
+
+// courses
+app.use('/edufusion/api/v2/courses', couresesRouter)
+
 
 
 export default app
