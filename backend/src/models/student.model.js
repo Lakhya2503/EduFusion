@@ -32,14 +32,27 @@ const studentSchema = new Schema(
     dateOfBirth: {
       type: Date,
     },
+    gender: {
+      type: String,
+      required: true,
+      enum: ["male", "female", "other"],
+      default: "",
+    },
+    role: {
+      type: String,
+      default: "Student",
+    },
     addressLine1: {
       type: String,
       required: true,
     },
+    addressLine2: {
+      type: String,
+    },
     city: {
       type: String,
     },
-    pinCode: {
+    pincode: {
       type: String,
       required: true,
     },
@@ -50,7 +63,7 @@ const studentSchema = new Schema(
         "https://i.pinimg.com/1200x/e5/14/94/e51494da5d8263f1c9021f4c3b2d4555.jpg",
     },
     shortBio: {
-        type :  String
+      type: String,
     },
     refreshToken: {
       type: String,
@@ -59,23 +72,32 @@ const studentSchema = new Schema(
   { timestamps: true }
 );
 
-adminSchema.pre("save", async function (next) {
+studentSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   this.password = await hash(this.password, 10);
   next();
 });
 
-adminSchema.methods.isPasswordValid = async function (password) {
-  return await compare(password.this.password);
+studentSchema.methods.isPasswordValid = async function (password) {
+  return await compare(password, this.password);
 };
 
-adminSchema.methods.genrateAccessToken = async function () {
+studentSchema.methods.genrateAccessToken = async function () {
   return jwt.sign(
     {
       _id: this._id,
-      email: this.email,
-      password: this.fullName,
+      username: this.username,
       fullName: this.fullName,
+      email: this.email,
+      password: this.password,
+      role: this.role,
+      contact: this.contact,
+      dateOfBirth: this.dateOfBirth,
+      gender: this.gender,
+      addressLine1: this.addressLine1,
+      addressLine2: this.addressLine2,
+      pincode: this.pincode,
+      shortBio: this.shortBio,
     },
     process.env.ACCESS_TOKEN_SECRET,
     {
@@ -84,7 +106,7 @@ adminSchema.methods.genrateAccessToken = async function () {
   );
 };
 
-adminSchema.methods.genrateRefreshToken = async function () {
+studentSchema.methods.genrateRefreshToken = async function () {
   return jwt.sign(
     {
       _id: this._id,

@@ -48,7 +48,6 @@ adminSchema.pre("save", async function (next) {
     next()
 })
 
-
 adminSchema.methods.isPasswordValid = async function (password) {
     return await compare(password,this.password)
 }

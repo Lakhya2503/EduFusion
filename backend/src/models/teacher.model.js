@@ -44,7 +44,6 @@ const teacherSchema = new Schema(
     yearsOfExperince: {
         type : String,    
         required: true,
-        default : 0
     },
     subjectsTaught: {
         type: String,
@@ -74,24 +73,34 @@ const teacherSchema = new Schema(
   { timestamps: true }
 );
 
-adminSchema.pre("save", async function (next) {
+teacherSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   this.password = await hash(this.password, 10);
   next();
 });
 
-adminSchema.methods.isPasswordValid = async function (password) {
-  return await compare(password.this.password);
+teacherSchema.methods.isPasswordValid = async function (password) {
+  return await compare(password,this.password);
 };
 
-adminSchema.methods.genrateAccessToken = async function () {
+teacherSchema.methods.genrateAccessToken = async function () {
   return jwt.sign(
     {
       _id: this._id,
-      email: this.email,
-      password: this.fullName,
-      fullName: this.fullName,
-      role: this.role,
+      username : this.username,
+      fullName : this.fullName,
+      email : this.email,
+      password : this.password,
+      role : this.role,
+      contact : this.contact,
+      dateOfBirth : this.dateOfBirth ,
+      gender : this.gender,
+      addressLine1 : this.addressLine1,
+      addressLine2 : this.addressLine2,
+      pincode : this.pincode,
+      yearsOfExperince : this.yearsOfExperince,
+      subjectsTaught : this.subjectsTaught,
+      professionalBiography : this.professionalBiography,
     },
     process.env.ACCESS_TOKEN_SECRET,
     {
@@ -100,7 +109,7 @@ adminSchema.methods.genrateAccessToken = async function () {
   );
 };
 
-adminSchema.methods.genrateRefreshToken = async function () {
+teacherSchema.methods.genrateRefreshToken = async function () {
   return jwt.sign(
     {
       _id: this._id,

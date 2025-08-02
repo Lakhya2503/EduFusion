@@ -2,29 +2,37 @@ import { model, Schema } from "mongoose"
 
 
 const coureseRating = new Schema({
-    star : {
-        type: Schema.Types.ObjectId,
-        ref : "Student"
-    },
-})
+  student: {
+    type: Schema.Types.ObjectId,
+    ref: "Student",
+  },
+  value: {
+    type: Number, 
+    min: 1,
+    max: 5,
+  },
+});
 
-const lessons = new Schema({
+const lessonSchema = new Schema(
+  {
     title: {
-        type: String,
-        required: true,
-        unique: true,
+      type: String,
+      required: true,
+      unique: true,
     },
     description: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     pdfLink: {
-        type: String,
+      type: String,
     },
     videoLink: {
-        type: String,
+      type: String,
     },
-}, { timestamps : true });
+  },
+  { timestamps: true }
+);
 
 const couresesSchema = new Schema(
   {
@@ -41,21 +49,17 @@ const couresesSchema = new Schema(
       type: String,
       required: true,
     },
-    curriculum: [
-      {
-        lessons,
-      },
-    ],
+    curriculum: [lessonSchema],
     basePrice: {
-      type: String,
+      type: Number,
       required: true,
     },
     offer: {
-      type: String,
-      default: 0,
+      type: Number,
+      default: "",
     },
     finalPrice: {
-      type: String,
+      type: Number,
       required: true,
     },
     owner: {
@@ -69,8 +73,12 @@ const couresesSchema = new Schema(
         ref: "Student",
       },
     ],
-    rating: {
-      type: [coureseRating],
+    rating: [coureseRating],
+    averageRating: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 5,
     },
   },
   { timestamps: true }

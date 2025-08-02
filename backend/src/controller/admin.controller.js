@@ -151,32 +151,44 @@ const loggedOutAdmin = asyncHandler(async (req,res) => {
       .json(new ApiResponse(200, {}, "admin loggedOut successFully"));
 })
 
-const refeshAccessToken = asyncHandler(async (req,res) => {
-    const incomingRefreshToken = req.cookies?.refreshToken
+const adminRefeshAccessToken = asyncHandler(async (req,res) => {
+    const incomingRefreshToken = req.cookies.refreshToken
 
     console.log(`incomming refresh Token : ${incomingRefreshToken}`);
-    
 
-    const decodedToken = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET);
-    
-    if (!decodedToken) {
-        throw new ApiError(401, "token invalid")
-    }
-
-    const admin = await Admin.findById(decodedToken._id)
-    
-    if (incomingRefreshToken !== admin?.refreshToken) {
-        throw new ApiError(400, "token used or exipred");
+    if (!incomingRefreshToken) {
+        throw new ApiError(401, "refresh token not found")      
     }
     
-    const { refreshToken, accessToken } = await genrateAccesstokenAndRefreshToken(admin._id)
 
-    return res
-        .status(200)
-        .cookie(refreshToken, options)
-        .cookie(accessToken,options)
-        .json(new ApiResponse(200, { accessToken, refreshToken }))
+    try {
+        const decodedToken = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET);
+        
+        if (!decodedToken) {
+            throw new ApiError(401, "token invalid")
+        }
+    
+        const admin = await Admin.findById(decodedToken?._id)
 
+        if (!admin) {
+            throw new ApiError(404, "admin not found")  
+        }
+        
+        if (incomingRefreshToken !== admin?.refreshToken) {
+            throw new ApiError(400, "token used or exipred");
+        }
+        
+        const { refreshToken, accessToken } = await genrateAccesstokenAndRefreshToken(admin._id);
+    
+        return res
+          .status(200)
+          .cookie("refreshToken", refreshToken, options)
+          .cookie("accessToken", accessToken, options)
+          .json(new ApiResponse(200, { accessToken, refreshToken }));
+    
+    } catch (error) {
+        throw new ApiError(401, error?.message || "token invalid or expired")
+    }
 })
 
 const getAdmin = asyncHandler(async (req, res) => {
@@ -193,7 +205,7 @@ const getAdmin = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, { admin: admin }, "User fetch successfully"))
 })
 
-const passwordUpdate = asyncHandler(async (req, res) => {
+const adminPasswordUpdate = asyncHandler(async (req, res) => {
     const { oldPassword, newPassword } = req.body
 
     const admin = await Admin.findById(req.admin._id)
@@ -224,10 +236,10 @@ const passwordUpdate = asyncHandler(async (req, res) => {
 
 
 export {
-    registerAdmin,
-    logginAdmin,
-    loggedOutAdmin,
-    refeshAccessToken,
-    passwordUpdate,
-    getAdmin,
+  registerAdmin,
+  logginAdmin,
+  loggedOutAdmin,
+  adminRefeshAccessToken,
+  adminPasswordUpdate,
+  getAdmin,
 };
