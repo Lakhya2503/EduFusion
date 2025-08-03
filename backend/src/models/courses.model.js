@@ -67,10 +67,10 @@ const couresesSchema = new Schema(
       ref: "Admin" || "Teacher",
       required: true,
     },
-    buyer: [
+    purches: [
       {
         type: Schema.Types.ObjectId,
-        ref: "Student",
+        ref: "Purchase",
       },
     ],
     rating: [coureseRating],

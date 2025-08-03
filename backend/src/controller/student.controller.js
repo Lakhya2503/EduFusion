@@ -97,6 +97,7 @@ const registerStudent = asyncHandler(async (req, res) => {
     role: role,
     avatar: avatar.url,
     contact,
+    purchesedCourse : [],
     dateOfBirth,
     gender,
     addressLine1,

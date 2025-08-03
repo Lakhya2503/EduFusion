@@ -84,7 +84,7 @@ const createCourses = asyncHandler(async (req, res) => {
     basePrice: Number(basePrice),
     curriculum: parsedCurriculum,
     owner: createdBy,
-    buyer: [],
+    purches: [],
     thumbnail: thumbnail.url,
     offer: Number(offer),
     finalPrice: Number(finalPrice),

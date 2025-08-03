@@ -56,6 +56,12 @@ const studentSchema = new Schema(
       type: String,
       required: true,
     },
+    purchesedCourse: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Purchase",
+      },
+    ],
     avatar: {
       type: String,
       required: true,
