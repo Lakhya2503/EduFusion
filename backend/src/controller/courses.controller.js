@@ -100,6 +100,18 @@ const createCourses = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, { course }, "course created successfully"));
 })
 
+const getCourses = asyncHandler(async (req, res) => {
+  const courses = await Courses.find();
+
+  if (!courses) {
+    new ApiError(400, "Coureses not fetch");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, courses, "course fetch Successfully"));
+});
+
 const updateCurriculum = asyncHandler(async (req, res) => {
   console.log(`req.body : ${req.body}`);
   
@@ -135,7 +147,4 @@ const updateCurriculum = asyncHandler(async (req, res) => {
 })
 
 
-export {
-  createCourses,
-  updateCurriculum
-};
+export { createCourses, updateCurriculum, getCourses };

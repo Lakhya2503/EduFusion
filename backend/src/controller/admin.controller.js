@@ -88,6 +88,7 @@ const registerAdmin = asyncHandler(async (req, res) => {
 const logginAdmin = asyncHandler(async (req, res) => {
     const { username, email, password } = req.body
     console.log(`username : ${username}, email : ${email}, password : ${password}`);
+
     
     if (!(username || email)) {
         throw new ApiError(404, "email or username are required")
@@ -115,7 +116,7 @@ const logginAdmin = asyncHandler(async (req, res) => {
     );
 
     if (!loggedInAdmin) {
-      throw new ApiError(404, "loggedI");
+      throw new ApiError(404, "user not found");
     }
 
    const { refreshToken, accessToken } = await genrateAccesstokenAndRefreshToken(admin._id)
@@ -128,7 +129,7 @@ const logginAdmin = asyncHandler(async (req, res) => {
         .json(
         new ApiResponse(
           200,
-          { loggedAdmin: loggedInAdmin, refreshToken, accessToken },
+           loggedInAdmin,
           "user loggedIn successFully"
         )
       )
@@ -192,9 +193,9 @@ const adminRefeshAccessToken = asyncHandler(async (req,res) => {
 })
 
 const getAdmin = asyncHandler(async (req, res) => {
-    console.log(req.params?.id);
+    console.log(req.admin?.id);
     
-    const admin = await Admin.findById(req.params?.id).select("-password -refreshToken")
+    const admin = await Admin.findById(req.admin?.id).select("-password -refreshToken")
 
     if (!admin) {
         throw new ApiError(404, "User not found")
@@ -202,7 +203,7 @@ const getAdmin = asyncHandler(async (req, res) => {
 
     return res
         .status(200)
-        .json(new ApiResponse(200, { admin: admin }, "User fetch successfully"))
+        .json(new ApiResponse(200,  admin, "User fetch successfully"))
 })
 
 const adminPasswordUpdate = asyncHandler(async (req, res) => {

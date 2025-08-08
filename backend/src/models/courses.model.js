@@ -47,7 +47,7 @@ const couresesSchema = new Schema(
     },
     thumbnail: {
       type: String,
-      required: true,
+      // required: true,
     },
     curriculum: [lessonSchema],
     basePrice: {

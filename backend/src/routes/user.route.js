@@ -48,11 +48,11 @@ router.route("/admin/register").post(
   registerAdmin
 );
 
-router.route("/admin/login").post(logginAdmin);
+router.route("/admin/login").post(upload.none(), logginAdmin);
 
 router.route("/admin/logout").post(verifyAdminJWT, loggedOutAdmin);
 
-router.route("/admin/:id").get(verifyAdminJWT, getAdmin);
+router.route("/admin/current-user").get(verifyAdminJWT, getAdmin);
 
 router
   .route("/admin/refresh-token")
@@ -75,11 +75,15 @@ router.route("/teacher/register").post(
   registerTeacher
 );
 
-router.route("/teacher/login").post(loggedInTeacher);
+router.route("/teacher/login").post(upload.none(), loggedInTeacher);
 
 router.route("/teacher/logout").post(verifyTeacherJWT, loggedOutTeacher);
 
-router.route("/teacher/:id").get(verifyTeacherJWT, getTeacher);
+router.route("/teacher/current-user").get(verifyTeacherJWT, getTeacher);
+
+
+
+
 
 router
   .route("/teacher/refresh-token")
@@ -102,11 +106,11 @@ router.route("/student/register").post(
   registerStudent
 );
 
-router.route("/student/login").post(loggedInStudent);
+router.route("/student/login").post(upload.none(), loggedInStudent);
 
 router.route("/student/logout").post(verifyStudentJWT, loggedOutStudent);
 
-router.route("/student/:id").get(verifyStudentJWT, getStudent);
+router.route("/student/current-user").get(verifyStudentJWT, getStudent);
   
 router
   .route("/student/refresh-token")

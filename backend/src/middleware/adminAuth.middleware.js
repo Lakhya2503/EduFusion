@@ -4,7 +4,7 @@ import { Admin } from '../models/admin.model.js'
 
 const verifyAdminJWT = async (req, _, next) => {
      try {
-       const incommingToken = req.cookies?.accessToken;
+       const incommingToken = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "")
 
        if (!incommingToken) {
          throw new ApiError(404, "incomming token not found");

@@ -167,13 +167,12 @@ const loggedInStudent = asyncHandler(async (req, res) => {
     .status(200)
     .cookie("refreshToken", refreshToken, options)
     .cookie("accessToken", accessToken, options)
-    .json(
-      new ApiResponse(
-        200,
-        { loginStudent: loginStudent, refreshToken, accessToken },
-        "STUDENT loggedIn successFully"
-      )
-    );
+    .json(new ApiResponse(
+       200,
+           loginStudent,
+          "user loggedIn successFully"
+        )
+      );
 });
 
 const loggedOutStudent = asyncHandler(async (req, res) => {
@@ -226,9 +225,9 @@ const studentRefeshAccessToken = asyncHandler(async (req, res) => {
 });
 
 const getStudent = asyncHandler(async (req, res) => {
-  console.log(req.params?.id);
+  console.log(req.student._id);
 
-  const student = await Student.findById(req.params?.id).select(
+  const student = await Student.findById(req.student._id).select(
     "-password -refreshToken"
   );
 

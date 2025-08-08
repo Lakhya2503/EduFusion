@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import {
   createCourses,
+  getCourses,
   updateCurriculum
 } from '../controller/courses.controller.js';
 import { verifyAdminJWT } from '../middleware/adminAuth.middleware.js'
@@ -18,14 +19,19 @@ router.route("/create/new").post(
       maxCount: 1,
     },
   ]),
-  verifyAdminJWT || verifyTeacherJWT,createCourses
+  verifyAdminJWT || verifyTeacherJWT,     
+  createCourses
 );
 
 router
   .route("/update-course")
-  .post(verifyAdminJWT || verifyTeacherJWT, updateCurriculum);
+  .post(verifyAdminJWT || verifyTeacherJWT,
+    updateCurriculum);
 
 router
-  .route("/purchase-course").post(verifyStudentJWT,purchaseCourse);
+  .route("/purchase-course").post(verifyStudentJWT,
+    purchaseCourse);
+
+router.route("/get-courses").get(verifyStudentJWT, getCourses);
 
 export default router
