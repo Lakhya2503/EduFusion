@@ -1,5 +1,5 @@
 import { Purchase } from "../models/coursePurchase.model.js";
-import { Courses } from "../models/courses.model.js";
+import { Course } from "../models/courses.model.js";
 import { Student } from "../models/student.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
@@ -11,7 +11,7 @@ const purchaseCourse = asyncHandler(async (req,res) => {
 
     console.log(`courseId : ${courseId}`);
 
-    let coursePrice = await Courses.findById(courseId)
+    let coursePrice = await Course.findById(courseId)
 
     const { basePrice, finalPrice, offer } = coursePrice;
 
@@ -54,7 +54,7 @@ const purchaseCourse = asyncHandler(async (req,res) => {
 
    try {
      if (purchase) {
-          course = await Courses.findByIdAndUpdate(courseId, {
+          course = await Course.findByIdAndUpdate(courseId, {
              $push: {
                 purches : purchase
             }

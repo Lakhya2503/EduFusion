@@ -69,7 +69,7 @@ router.route("/teacher/register").post(
     {
       name: "avatar",
       maxCount: 2,
-    },
+    },  
   ]),
   verifyAdminJWT,
   registerTeacher

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Percentage Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .calculator-container {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 450px;
+            overflow: hidden;
+        }
+        
+        .calculator-header {
+            background: linear-gradient(90deg, #4776E6 0%, #8E54E9 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .calculator-header h1 {
+            font-weight: 600;
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        
+        .calculator-header p {
+            opacity: 0.9;
+        }
+        
+        .calculator-body {
+            padding: 25px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e1e1;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .input-group input:focus {
+            border-color: #4776E6;
+            outline: none;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .button-group button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-discount {
+            background-color: #4776E6;
+            color: white;
+        }
+        
+        .btn-discount:hover {
+            background-color: #3b64c7;
+        }
+        
+        .btn-increase {
+            background-color: #4CD964;
+            color: white;
+        }
+        
+        .btn-increase:hover {
+            background-color: #3cb854;
+        }
+        
+        .btn-clear {
+            background-color: #FF3B30;
+            color: white;
+        }
+        
+        .btn-clear:hover {
+            background-color: #e0352b;
+        }
+        
+        .result-container {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border: 2px dashed #e1e1e1;
+        }
+        
+        .result-title {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .result-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #4776E6;
+        }
+        
+        .calculation-details {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        @media (max-width: 480px) {
+            .calculator-container {
+                border-radius: 15px;
+            }
+            
+            .calculator-header {
+                padding: 20px;
+            }
+            
+            .calculator-body {
+                padding: 20px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-container">
+        <div class="calculator-header">
+            <h1>Percentage Calculator</h1>
+            <p>Calculate discounts and increases easily</p>
+        </div>
+        
+        <div class="calculator-body">
+            <div class="input-group">
+                <label for="originalAmount">Original Amount (₹)</label>
+                <input type="number" id="originalAmount" placeholder="Enter amount" value="10000">
+            </div>
+            
+            <div class="input-group">
+                <label for="percentage">Percentage (%)</label>
+                <input type="number" id="percentage" placeholder="Enter percentage" value="20">
+            </div>
+            
+            <div class="button-group">
+                <button class="btn-discount" onclick="calculateDiscount()">Apply Discount</button>
+                <button class="btn-increase" onclick="calculateIncrease()">Apply Increase</button>
+                <button class="btn-clear" onclick="clearFields()">Clear</button>
+            </div>
+            
+            <div class="result-container">
+                <div class="result-title">Final Amount</div>
+                <div class="result-value" id="result">₹8,000.00</div>
+                <div class="calculation-details" id="calculationDetails">
+                    ₹10,000 - 20% (₹2,000) = ₹8,000
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Format number to Indian currency format
+        function formatCurrency(amount) {
+            return '₹' + amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        }
+        
+        // Calculate discount
+        function calculateDiscount() {
+            const originalAmount = parseFloat(document.getElementById('originalAmount').value);
+            const percentage = parseFloat(document.getElementById('percentage').value);
+            
+            if (isNaN(originalAmount) || isNaN(percentage)) {
+                alert('Please enter valid numbers');
+                return;
+            }
+            
+            const discountAmount = (originalAmount * percentage) / 100;
+            const finalAmount = originalAmount - discountAmount;
+            
+            document.getElementById('result').textContent = formatCurrency(finalAmount);
+            document.getElementById('calculationDetails').innerHTML = 
+                `${formatCurrency(originalAmount)} - ${percentage}% (${formatCurrency(discountAmount)}) = ${formatCurrency(finalAmount)}`;
+        }
+        
+        // Calculate increase
+        function calculateIncrease() {
+            const originalAmount = parseFloat(document.getElementById('originalAmount').value);
+            const percentage = parseFloat(document.getElementById('percentage').value);
+            
+            if (isNaN(originalAmount) || isNaN(percentage)) {
+                alert('Please enter valid numbers');
+                return;
+            }
+            
+            const increaseAmount = (originalAmount * percentage) / 100;
+            const finalAmount = originalAmount + increaseAmount;
+            
+            document.getElementById('result').textContent = formatCurrency(finalAmount);
+            document.getElementById('calculationDetails').innerHTML = 
+                `${formatCurrency(originalAmount)} + ${percentage}% (${formatCurrency(increaseAmount)}) = ${formatCurrency(finalAmount)}`;
+        }
+        
+        // Clear input fields
+        function clearFields() {
+            document.getElementById('originalAmount').value = '';
+            document.getElementById('percentage').value = '';
+            document.getElementById('result').textContent = '₹0.00';
+            document.getElementById('calculationDetails').innerHTML = 'Enter values to calculate';
+        }
+        
+        // Initialize with example calculation
+        window.onload = calculateDiscount;
+    </script>
+</body>
+</html>

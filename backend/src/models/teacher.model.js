@@ -3,73 +3,87 @@ import { compare, hash } from "bcrypt";
 import jwt from "jsonwebtoken";
 
 const teacherSchema = new Schema(
-    {
+  {
     username: {
-        type: String,
-        required: true,
-        lowercase: true,
-        trim: true,
+      type: String,
+      required: true,
+      lowercase: true,
+      trim: true,
     },
     fullName: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     email: {
-        type: String,
-        required: true,
-        lowercase: true,
-        unique: true,
-        match: [/.+\@.+\..+/, 'Please fill a valid email address']
+      type: String,
+      required: true,
+      lowercase: true,
+      unique: true,
+      match: [/.+\@.+\..+/, "Please fill a valid email address"],
     },
-    contact : {
-        type: String,
+    contact: {
+      type: String,
     },
     dateOfBirth: {
-        type : Date
+      type: Date,
     },
     gender: {
-        type: String,
-        enum : ["male", "female","other"]
+      type: String,
+      enum: ["male", "female", "other"],
     },
     addressLine1: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
-     addressLine2: {
-        type: String,
+    addressLine2: {
+      type: String,
     },
     pincode: {
-         type : String
+      type: String,
     },
     yearsOfExperince: {
-        type : String,    
-        required: true,
+      type: String,
+      required: true,
     },
     subjectsTaught: {
-        type: String,
-        enum : ["JS","JAVA","PYTHON","DSA","C++","C#","C","RUBY","WEB DEV"],
+      type: String,
+      enum: [
+        "JS",
+        "JAVA",
+        "PYTHON",
+        "DSA",
+        "C++",
+        "C#",
+        "C",
+        "RUBY",
+        "WEB DEV",
+      ],
     },
-    professionalBiography :{
-        type : String,
+    professionalBiography: {
+      type: String,
     },
     password: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     avatar: {
-        type: String,
-        required : true,
-        default:
-            "https://i.pinimg.com/1200x/e5/14/94/e51494da5d8263f1c9021f4c3b2d4555.jpg",
+      type: String,
+      required: true,
+      default:
+        "https://i.pinimg.com/1200x/e5/14/94/e51494da5d8263f1c9021f4c3b2d4555.jpg",
+    },
+    teacherType: {
+      type: String,
+      default: "teacher",
     },
     role: {
-        type: String,
-        default : "teacher"
+      type: String,
+      default: "teacher",
     },
     refreshToken: {
-        type: String,
-        },
+      type: String,
     },
+  },
   { timestamps: true }
 );
 
