@@ -122,13 +122,13 @@ courseSchema.pre('save', function(next) {
   next();
 });
 
-
 courseSchema.methods.calculateAverageRating = function() {
   if (this.ratings.length === 0) {
     this.averageRating = 0;
     return;
   }
   
+
   const sum = this.ratings.reduce((acc, rating) => acc + rating.value, 0);
   this.averageRating = parseFloat((sum / this.ratings.length).toFixed(1));
 };

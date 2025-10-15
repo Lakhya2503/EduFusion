@@ -13,6 +13,8 @@ import {
   FiMenu,
   FiX
 } from 'react-icons/fi';
+import { MdEmojiObjects } from "react-icons/md";
+
 
 function Navbar() {
   const navigate = useNavigate();
@@ -36,9 +38,9 @@ function Navbar() {
       icon: <FiBook className="mr-1" />
     },
     {
-      name: "Pricing & FAQ",
-      path: "/pricing-faq",
-      icon: <FiDollarSign className="mr-1" />
+      name: "demo",
+      path: "/demo",
+      icon: <MdEmojiObjects  className="mr-1" />
     },
     {
       name: "Blogs",
@@ -91,16 +93,20 @@ function Navbar() {
 
 
         <div className="hidden md:flex items-center">
-          {isAuthenticated ? (
+          {isAuthenticated && (
             <NavCard className="text-white" />
-          ) : (
+          )}
+
+          {
+            !isAuthenticated &&  (
             <NavLink 
               to="/login" 
               className="flex items-center py-2 px-5 rounded-lg bg-white text-blue-700 font-medium transition-all duration-300 hover:bg-blue-100 hover:shadow-md"
             >
               Login
             </NavLink>
-          )}
+          )
+          }
         </div>
 
 

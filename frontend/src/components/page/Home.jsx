@@ -1,6 +1,6 @@
 import React from 'react'
 import Navbar from '../common/Navbar'
-import { HERO_girl, Student_1, Student_2, Student_3, Student_4, Teacher_Teaching } from '../../../public'
+import { HERO_girl, Student_1, Student_2, Student_3, Student_4, Students_class, Teacher_Intructor, Teacher_Teaching } from '../../../public'
 import { GiBookmarklet } from "react-icons/gi";
 import { IoMdCall } from "react-icons/io";
 import { FaMicrophone } from "react-icons/fa";
@@ -12,6 +12,7 @@ import { FiUserCheck } from "react-icons/fi";
 import { LuChartSpline } from "react-icons/lu";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import CourseCarousel from './../cards/CourseCarousel';
+import ReviewList from '../cards/ReviewList';
 
 function Home() {
 
@@ -80,93 +81,172 @@ function Home() {
                       </div>
                   </div>
           </nav>
+
+          <div className="my-8 flex items-center justify-center gap-8 text-center flex-col">
+                    <div className="w-[600px] flex flex-col gap-3">
+                           <h2 className="text-3xl font-semibold text-orange-400">What is <span className='text-violet-600'>Edufusion?</span></h2>
+                            <p className='text-[16px] font-semibold opacity-60 text-gray-600 uppercase leading-7'>Edufusion is a platform that allows educators to create online classes whereby they can store the course materials online; manage assignments, quizzes and exams; monitor due dates; grade results and provide students with feedback all in one place</p>
+                    </div>
+                    <div className="flex gap-8 w-full items-center justify-center px-4 py-8">
+
+                        <div 
+                          className="h-[380px] w-[38%] bg-cover rounded-2xl flex items-center justify-center relative group overflow-hidden shadow-2xl"
+                          style={{ backgroundImage: `url(${Teacher_Intructor})` }}
+                        >
+
+                          <div className="absolute inset-0 bg-gradient-to-r from-purple-600/70 to-blue-600/50 group-hover:from-purple-700/80 group-hover:to-blue-700/60 transition-all duration-500"></div>
+
+                          <div className="flex flex-col gap-6 items-center text-center relative z-10 transform group-hover:scale-105 transition-transform duration-300">
+                            <h2 className='text-2xl uppercase font-bold text-white tracking-wider drop-shadow-lg'>For Instructors</h2>
+                            <button className='px-8 py-4 text-lg rounded-full border-2 border-white bg-transparent text-white hover:bg-white hover:text-purple-600 duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all'>
+                              Start a Class Today
+                            </button>
+                          </div>
+                        </div>
+
+                        
+                        <div 
+                          className="h-[380px] w-[38%] bg-cover rounded-2xl flex items-center justify-center relative group overflow-hidden shadow-2xl"
+                          style={{ backgroundImage: `url(${Students_class})` }}
+                        >
+
+                          <div className="absolute inset-0 bg-gradient-to-r from-green-600/70 to-teal-600/50 group-hover:from-green-700/80 group-hover:to-teal-700/60 transition-all duration-500"></div>
+                          
+
+                          <div className="flex flex-col gap-6 items-center text-center relative z-10 transform group-hover:scale-105 transition-transform duration-300">
+                            <h2 className='text-2xl uppercase font-bold text-white tracking-wider drop-shadow-lg'>For Students</h2>
+                            <button className='px-8 py-4 text-lg rounded-full border-2 border-white bg-transparent text-white hover:bg-white hover:text-green-600 duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all'>
+                              Enter Access Code
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+          </div>
+
           <div className="flex flex-col px-25 text-zinc-900">
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col my-20">
                       <h3 className='text-5xl font-bold'>Technologies You </h3>
                       <h3 className='text-5xl font-bold'>will Learn </h3>
                 </div>
-                      <ul className="flex flex-wrap justify-center gap-6 max-w-4xl">
+                      <ul className="flex flex-wrap justify-center gap-10 max-w-4xl">
+                            <li className="group relative">
+                              <div className="w-18 h-18 bg-orange-500 rounded-xl shadow-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl">
+                                <span className="text-white font-bold text-[15px]">HTML</span>
+                              </div>
+                              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <span className="text-black text-sm font-medium whitespace-nowrap">HTML</span>
+                              </div>
+                            </li>
 
-                          {/* HTML */}
-                        <li className="group relative">
-                          <div className="w-18 h-18 bg-orange-500 rounded-xl shadow-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl">
-                            <span className="text-white font-bold text-[15px]">HTML</span>
-                          </div>
-                          <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <span className="text-black text-sm font-medium whitespace-nowrap">HTML</span>
-                          </div>
-                        </li>
+                            <li className="group relative">
+                              <div className="w-18 h-18 bg-blue-400 rounded-xl shadow-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl">
+                                <span className="text-white font-bold text-[15px]">CSS</span>
+                              </div>
+                              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <span className="text-black text-sm font-medium whitespace-nowrap">CSS</span>
+                              </div>
+                            </li>
 
-                         {/* CSS */}
-                        <li className="group relative">
-                          <div className="w-18 h-18 bg-blue-400 rounded-xl shadow-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl">
-                            <span className="text-white font-bold text-[15px]">CSS</span>
-                          </div>
-                          <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <span className="text-black text-sm font-medium whitespace-nowrap">CSS</span>
-                          </div>
-                        </li>
+                            <li className="group relative">
+                              <div className="w-18 h-18 bg-yellow-400 rounded-xl shadow-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl">
+                                <span className="text-white font-bold text-[15px]">JS</span>
+                              </div>
+                              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <span className="text-black text-sm font-medium whitespace-nowrap">JavaScript</span>
+                              </div>
+                            </li>
 
-                        {/* JavaScript */}
-                        <li className="group relative">
-                          <div className="w-18 h-18 bg-yellow-400 rounded-xl shadow-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl">
-                            <span className="text-white font-bold text-[15px]">JS</span>
-                          </div>
-                          <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <span className="text-black text-sm font-medium whitespace-nowrap">JavaScript</span>
-                          </div>
-                        </li>
+                            <li className="group relative">
+                              <div className="w-18 h-18 bg-red-600 rounded-xl shadow-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl">
+                                <span className="text-white font-bold text-[15px]">ANG</span>
+                              </div>
+                              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <span className="text-black text-sm font-medium whitespace-nowrap">Angular</span>
+                              </div>
+                            </li>
 
-                        {/* Angular */}
-                        <li className="group relative">
-                          <div className="w-18 h-18 bg-red-600 rounded-xl shadow-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl">
-                            <span className="text-white font-bold text-[15px]">ANG</span>
-                          </div>
-                          <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <span className="text-black text-sm font-medium whitespace-nowrap">Angular</span>
-                          </div>
-                        </li>
+                            <li className="group relative">
+                              <div className="w-18 h-18 bg-blue-500 rounded-xl shadow-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl">
+                                <span className="text-white font-bold text-[15px]">React</span>
+                              </div>
+                              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <span className="text-black text-sm font-medium whitespace-nowrap">React</span>
+                              </div>
+                            </li>
 
-                        {/* React */}
-                        <li className="group relative">
-                          <div className="w-18 h-18 bg-blue-500 rounded-xl shadow-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl">
-                            <span className="text-white font-bold text-[15px]">React</span>
-                          </div>
-                          <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <span className="text-black text-sm font-medium whitespace-nowrap">React</span>
-                          </div>
-                        </li>
+                            <li className="group relative">
+                              <div className="w-18 h-18 bg-gray-800 rounded-xl shadow-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl">
+                                <span className="text-white font-bold text-sm">Express</span>
+                              </div>
+                              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <span className="text-black text-sm font-medium whitespace-nowrap">Express.js</span>
+                              </div>
+                            </li>
 
-                        {/* Express.js */}
-                        <li className="group relative">
-                          <div className="w-18 h-18 bg-gray-800 rounded-xl shadow-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl">
-                            <span className="text-white font-bold text-sm">Express</span>
-                          </div>
-                          <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <span className="text-black text-sm font-medium whitespace-nowrap">Express.js</span>
-                          </div>
-                        </li>
+                            <li className="group relative">
+                              <div className="w-18 h-18 bg-red-500 rounded-xl shadow-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl">
+                                <span className="text-white font-bold text-[15px]">JAVA</span>
+                              </div>
+                              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <span className="text-black text-sm font-medium whitespace-nowrap">Java</span>
+                              </div>
+                            </li>
 
-                        {/* Java */}
-                        <li className="group relative">
-                          <div className="w-18 h-18 bg-red-500 rounded-xl shadow-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl">
-                            <span className="text-white font-bold text-[15px]">JAVA</span>
-                          </div>
-                          <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <span className="text-black text-sm font-medium whitespace-nowrap">Java</span>
-                          </div>
-                        </li>
+                            <li className="group relative">
+                              <div className="w-18 h-18 bg-green-600 rounded-xl shadow-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl">
+                                <span className="text-white font-bold text-xl">Dj</span>
+                              </div>
+                              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <span className="text-black text-sm font-medium whitespace-nowrap">Django</span>
+                              </div>
+                            </li>
 
-                        <li className="group relative">
-                          <div className="w-18 h-18 bg-green-600 rounded-xl shadow-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl">
-                            <span className="text-white font-bold text-xl">Dj</span>
-                          </div>
-                          <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <span className="text-black text-sm font-medium whitespace-nowrap">Django</span>
-                          </div>
-                        </li>
-                     </ul>
+                            <li className="group relative">
+                              <div className="w-18 h-18 bg-blue-600 rounded-xl shadow-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl">
+                                <span className="text-white font-bold text-[15px]">Python</span>
+                              </div>
+                              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <span className="text-black text-sm font-medium whitespace-nowrap">Python</span>
+                              </div>
+                            </li>
+
+                            <li className="group relative">
+                              <div className="w-18 h-18 bg-purple-600 rounded-xl shadow-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl">
+                                <span className="text-white font-bold text-[15px]">Kotlin</span>
+                              </div>
+                              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <span className="text-black text-sm font-medium whitespace-nowrap">Kotlin</span>
+                              </div>
+                            </li>
+
+                            <li className="group relative">
+                              <div className="w-18 h-18 bg-green-500 rounded-xl shadow-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl">
+                                <span className="text-white font-bold text-[15px]">Mongo</span>
+                              </div>
+                              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <span className="text-black text-sm font-medium whitespace-nowrap">MongoDB</span>
+                              </div>
+                            </li>
+
+                            <li className="group relative">
+                              <div className="w-18 h-18 bg-blue-700 rounded-xl shadow-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl">
+                                <span className="text-white font-bold text-[15px]">MySQL</span>
+                              </div>
+                              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <span className="text-black text-sm font-medium whitespace-nowrap">MySQL</span>
+                              </div>
+                            </li>
+
+                            <li className="group relative">
+                              <div className="w-18 h-18 bg-blue-800 rounded-xl shadow-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl">
+                                <span className="text-white font-bold text-[13px]">PstSQL</span>
+                              </div>
+                              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <span className="text-black text-sm font-medium whitespace-nowrap">PostgreSQL</span>
+                              </div>
+                            </li>
+                          </ul>
         </div>
             <div className="flex justify-between gap-30 items-center my-10 w-full">
                           <div className="py-8 px-2 flex flex-col gap-5">
@@ -266,6 +346,10 @@ function Home() {
                               </div>
                           </div>
                                       <CourseCarousel/>
+                  </div>
+
+                  <div className="my-6">
+                           <ReviewList/>
                   </div>
 
 

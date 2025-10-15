@@ -14,6 +14,7 @@ function NavCard({
         role : userType
     } = user
 
+    
     console.log(userType);
     
 

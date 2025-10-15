@@ -9,6 +9,9 @@ import Student_2 from './student_2.jpeg'
 import Student_3 from './student_3.jpeg'
 import Student_4 from './student_4.jpeg'
 import Icon from './icons8-graduation-cap-16.png'
+import Teacher_Intructor from './teacher_instructor.jpg'
+import Students_class from './students_class.jpg'
+import EduFusionSVG from './education.svg'
 
 
 export {
@@ -22,5 +25,8 @@ export {
     Student_2,
     Student_3,
     Student_4,
-    Icon
+    Icon,
+    Teacher_Intructor,
+    Students_class,
+    EduFusionSVG
 };

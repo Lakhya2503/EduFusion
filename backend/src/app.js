@@ -35,12 +35,16 @@ app.use(cookieParser());
 
 import authRouter from './routes/user.route.js'
 import couresesRouter from './routes/course.route.js'
+import commonRouter from "./routes/common.route.js";
 
 // users ( admin/ teacher/ student )
-app.use('/edufusion/api/v2/users', authRouter)
+app.use("/edufusion/api/v2/users", authRouter);
 
 // courses
-app.use('/edufusion/api/v2/courses', couresesRouter)
+app.use("/edufusion/api/v2/courses", couresesRouter);
+
+// common
+app.use("/edufusion/api/v2", commonRouter);
 
 
 

@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.9.0",
+    "@rive-app/react-canvas": "^4.23.4",
     "@tailwindcss/vite": "^4.1.11",
     "axios": "^1.11.0",
     "lodash": "^4.17.21",
@@ -26,6 +27,7 @@
     "react-toastify": "^11.0.5",
     "redux": "^5.0.1",
     "redux-persist": "^6.0.0",
+    "rive-react": "^4.23.4",
     "tailwindcss": "^4.1.11"
   },
   "devDependencies": {

@@ -19,14 +19,13 @@ router.route("/create/new").post(
       maxCount: 1,
     },
   ]),
-   verifyTeacherJWT ,
+  [ verifyTeacherJWT, verifyAdminJWT],
   createCourses
 );
 
 router
   .route("/update-course")
-  .post(verifyAdminJWT || verifyTeacherJWT,
-    updateCurriculum);
+  .post([verifyAdminJWT , verifyTeacherJWT], updateCurriculum);
 
 router
   .route("/purchase-course").post(verifyStudentJWT,
@@ -35,6 +34,8 @@ router
 // router.route("/get-courses").get(verifyStudentJWT, getCourses);
 // router.route("/get-courses").get(verifyTeacherJWT, getCourses);
 // router.route("/get-courses").get(verifyAdminJWT, getCourses);
+
+
 router.route("/get-courses").get(getCourses);
 
 export default router

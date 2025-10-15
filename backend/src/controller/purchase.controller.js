@@ -7,7 +7,9 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 
 
 const purchaseCourse = asyncHandler(async (req,res) => {
-    const { courseId } = req.body
+  const { courseId } = req.body
+  
+  // add functionality of if same course and same student are exist then show the error of already this course buy by the user
 
     console.log(`courseId : ${courseId}`);
 
@@ -88,3 +90,4 @@ const purchaseCourse = asyncHandler(async (req,res) => {
 export {
     purchaseCourse
 }
+

@@ -43,14 +43,15 @@ const createCourses = asyncHandler(async (req, res) => {
     title: title.trim().toLowerCase() 
   });
   
+  
   if (existingCourse) {
     throw new ApiError(409, `Course with title "${title}" already exists`);
   }
 
-  const adminId = req.admin?.id;
   const teacherId = req.teacher?.id;
+  const adminId = req.admin?.id;
 
-  if (!adminId && !teacherId) {
+  if (!adminId || !teacherId) {
     throw new ApiError(401, "Unauthorized - No admin or teacher found");
   }
 
@@ -139,7 +140,7 @@ const createCourses = asyncHandler(async (req, res) => {
     );
 });
 
-const getCourses = asyncHandler(async (req, res) => {
+const getCourses = asyncHandler(async (_, res) => {
   const courses = await Course.find({ isActive: true })
     .populate('curriculum')
     .populate('owner')

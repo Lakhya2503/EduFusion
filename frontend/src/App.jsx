@@ -39,9 +39,16 @@ import Home from './components/page/Home';
 import Footer from './components/common/Footer';
 import About from './components/page/About';
 import Contact from './components/page/Contact';
-import PricingFAQ from './components/page/PricingFAQ';
+// import PricingFAQ from './components/page/PricingFAQ';
 import Blogs from './components/page/Blogs';
 import Courses from './components/page/Courses';
+import DEMOPAGE from './components/page/DEMOPAGE';
+import Message from './components/Dashboard/teacher/Message';
+import Calendar from './components/Dashboard/teacher/Calendar';
+import Notification from './components/Dashboard/teacher/Notification';
+import TeacherCourse from './components/Dashboard/teacher/TeacherCourse';
+import TeacherDashHome from './components/Dashboard/teacher/TeacherDashHome';
+import TeacherSettings from './components/Dashboard/teacher/TeacherSettings';
 function App() {
 // {
 //     // const location = useLocation()
@@ -157,27 +164,67 @@ function App() {
   //    <Card/>
   // )
 
+
+
+
+    const isAnyDashboard = [
+    '/dashboard',
+    '/admin/dashboard',
+    '/admin/profile',
+    '/teacher/dashboard',
+    '/teacher/profile',
+    '/student/dashboard',
+    '/student/profile',
+  ].some(path => location.pathname.startsWith(path))
+
+
+   const isAuthPage = [
+    '/login',
+  ].some(path => location.pathname.startsWith(path))
+
+
+
       return (
          <div className="flex h-fit flex-col">
-          {/* <Navbar/> */}
              <Routes>
                 <Route path='/' element={<Home/>} />
+                <Route path='/demo' element={<DEMOPAGE/>} />
                 <Route path='/about' element={<About/>} />
                 <Route path='/contact' element={<Contact/>} />
-                <Route path='/pricing-faq' element={<PricingFAQ/>} />
+                {/* <Route path='/pricing-faq' element={<PricingFAQ/>} /> */}
                 <Route path='/blogs' element={<Blogs/>} />
                 <Route path='/courses' element={<Courses/>} />
-                <Route path='admin/dashboard' element={<AdminDashboard/>} />
-                <Route path='teacher/dashboard' element={<TeacherDashboard/>} />
+                
+                <Route path='admin/dashboard' element={<AdminDashboard/>} >
+                      
+                </Route>
+
+                <Route path='teacher/dashboard' element={<TeacherDashboard/>}>
+                       <Route path='*' element={<TeacherDashHome/>} />
+                       <Route path='home' element={<TeacherDashHome/>} />
+                      <Route path='courses' element={<TeacherCourse/>} />
+                      <Route path='notification' element={<Notification/>} />
+                      <Route path='message' element={<Message/>} />
+                      <Route path='calendar' element={<Calendar/>} />
+                      <Route path='setting' element={<TeacherSettings/>} />
+
+
+                </Route>
+
+
+                <Route path='student/dashboard' element={<StudentDashboard/>}>
+                
+                </Route>
+
+
                 <Route path='login' element={<Login/>} />
-                <Route path='student/dashboard' element={<StudentDashboard/>} />
           </Routes>
-              <Footer/>
+               {!isAuthPage && !isAnyDashboard && <Footer />}
          </div>
       )
 
 
-  // )
+
 
 }
 
