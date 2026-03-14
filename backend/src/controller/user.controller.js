@@ -1,10 +1,10 @@
+import crypto from 'crypto';
+import path from 'path';
 import User from '../models/user.models.js';
 import parseData from '../parser/index.js';
 import { ApiError } from '../utils/ApiError.js';
 import { ApiResponse } from '../utils/ApiResponse.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
-import crypto from 'crypto'
-import path from 'path';
 import { secretKeyUse } from '../utils/helper.js';
 
 const options = {
@@ -239,84 +239,76 @@ const resetForgetPassword = asyncHandler(async(req,res)=>{
 
 const addBulkUsers = asyncHandler(async(req,res)=>{
 
-    const file = req.files?.userList[0]?.path;
-   const fileExtension =  path.extname(file);
+      const file = req.files?.userList[0]?.path;
 
-   const parsingdata  = await parseData(file, fileExtension)  // todo : this return parse data
+      const fileExtension = path.extname(file);
 
-    const userAlreadyExistOnServer = []
-   const newUserFromClient = []
-   const notValidData = []
+      const parsingdata = await parseData(file, fileExtension)   // todo : this return parse data
+
+      const userAlreadyExistOnServer = []
+
+      const newUserFromClient = []
+
+      const notValidData = []
 
       const allUserSId = parsingdata.map(i => i._id)
+
       const existingUser = await User.find({_id : {$in : allUserSId}}).select('_id')
+
       const existedUsersIdSet = new Set(existingUser.map(i => i._id.toString()))
 
-  for(const users of parsingdata) {
+     for(const users of parsingdata) {
 
-    const {
-      username = "",
-      email = "",
-      password = "",
-      secretkey = ""
-    } = users
+      const { username = "", email = "", password = "", secretkey = "" } = users
 
-     const role =  secretKeyUse(secretkey)
+      const role = secretKeyUse(secretkey)
 
-       const emptyFiled = [username,email,email,password].filter(field => String(field).trim() === "" ||  field === undefined || field === null)
+       const emptyFiled = [username,email,password]
+       .filter(field => String(field).trim() === "" || field === undefined || field === null)
 
+       if(emptyFiled.length > 0) {
+        notValidData.push({user : users, missingFiled : emptyFiled})
+          continue;
+         }
 
-    if(emptyFiled.length > 0) {
-      notValidData.push({user : users, missingFiled : emptyFiled})
-      continue;
-    }
+         if(existedUsersIdSet.has(username)){
+           userAlreadyExistOnServer.push(users)
+            continue;
+          }
 
-      if(existedUsersIdSet.has(username)){
-        userAlreadyExistOnServer.push(users)
-        continue;
-      }
+          newUserFromClient.push({ username, password : password, email, role : role }) }
 
-       newUserFromClient.push({
-             username,
-             password,
-             email,
-              role
-        })
+          let insertedUsers = [];
 
-  }
+          try { insertedUsers = await User.insertMany(newUserFromClient, { ordered: false });
 
-  let insertedUsers = [];
+        } catch (err) { console.error("Insert error:", err.writeErrors);
+          insertedUsers = err.insertedDocs || [];
+        }
+           console.log("Inserted Users:", insertedUsers.length);
 
-      try {
-
-        insertedUsers = await User.insertMany(newUserFromClient, { ordered:false })
-
-        console.log("Inserted Users:", insertedUsers.length)
-
-      } catch(err){
-
-        console.log("Insert error:", err)
-
-      }
-
-
-
-    return res.status(200).json(new ApiResponse(200, {
-        newUserFromClient,
-        userAlreadyExistOnServer,
-        notValidData
-    }, "Users add successfully"))
+        return res
+          .status(200)
+          .json(
+              new ApiResponse(
+                200,
+                {
+                  newUserFromClient,
+                  userAlreadyExistOnServer,
+                  notValidData
+                },
+            "Users add successfully"))
 })
 
 
 export {
+  addBulkUsers,
+  fetCurrentUser,
+  forgetPasswordRequest,
   loggedInUser,
   loggedOut,
   registerUser,
-  fetCurrentUser,
-  forgetPasswordRequest,
-  resetForgetPassword,
   resendEmailVerification,
-  verifyEmail,
-  addBulkUsers
+  resetForgetPassword,
+  verifyEmail
 };

@@ -9,8 +9,7 @@ const userSchema = new Schema(
         username : {
            type : String,
            required: true,
-           lowerCase : true,
-           unique : true,
+           lowercase : true,
            trim :  true
         },
         studentId : {
@@ -77,6 +76,14 @@ const userSchema = new Schema(
         }
   }, { timestamps : true }
 )
+
+userSchema.pre("insertMany", async function (docs) {
+  for (const doc of docs) {
+    if (doc.password) {
+      doc.password = await bcrypt.hash(doc.password, 10)
+    }
+  }
+})
 
 userSchema.pre("save", async function(){
     if(!this.isModified("password")) return;
