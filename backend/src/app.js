@@ -30,22 +30,15 @@ app.use(express.static('public'))
 app.use(cookieParser());
 
 
-
+//  =======================================================
 // import router
-
-import authRouter from './routes/user.route.js'
-import couresesRouter from './routes/course.route.js'
-import commonRouter from "./routes/common.route.js";
-
-// users ( admin/ teacher/ student )
-app.use("/edufusion/api/v2/users", authRouter);
-
-// courses
-app.use("/edufusion/api/v2/courses", couresesRouter);
-
-// common
-app.use("/edufusion/api/v2", commonRouter);
+//  =======================================================
+import authRouter from './routes/auth.route.js'
 
 
+//  =======================================================
+// Handle route
+//  =======================================================
+app.use('/api/v1/edu/auth', authRouter)
 
 export default app

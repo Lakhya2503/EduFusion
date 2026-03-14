@@ -1,7 +1,7 @@
 import app from './app.js';
 import { connectDB } from './db/index.js'
 
-const port = process.env.PORT || 4000
+const port = process.env.PORT || 5000
 
 connectDB().then(() => {
     app.listen(port, () => {
@@ -11,4 +11,3 @@ connectDB().then(() => {
     console.log(`ERROR ON ${error.message || "error to connected the database"}`)
     process.exit(1)
 })
-
