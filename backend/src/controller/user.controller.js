@@ -6,6 +6,7 @@ import { ApiError } from '../utils/ApiError.js';
 import { ApiResponse } from '../utils/ApiResponse.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { secretKeyUse } from '../utils/helper.js';
+import { fileupload } from '../utils/cloudinary.js';
 
 const options = {
   httpOnly : true,
@@ -39,14 +40,16 @@ const registerUser = asyncHandler(async(req,res)=> {
         throw new ApiError(400, "all fields are required")
       }
 
+      console.log("secretkey", secretkey)
       const role = secretKeyUse(secretkey)
+      console.log("role", role)
 
 
         const userRegister = await User.create({
           username,
           password,
           email,
-          role,
+          role : role,
           isEmailVerified : false
       })
 
@@ -145,11 +148,11 @@ const loggedInUser = asyncHandler(async(req,res)=>{
     }
     )
 
-  // const passwordValid =  await loggedInUser.isPasswordCorrect(password)
+  const passwordValid =  await loggedInUser.isPasswordCorrect(password)
 
-  // if(!passwordValid) {
-  //   throw new ApiError(400, "please ensert valid password")
-  // }
+  if(!passwordValid) {
+    throw new ApiError(400, "please ensert valid password")
+  }
 
 
     if(!loggedInUser) {
@@ -201,9 +204,12 @@ const forgetPasswordRequest = asyncHandler(async(req,res)=>{
     user.forgetPasswordToken = hashToken
     user.forgetPasswordExpiry = tokenExpiry
 
-    await user.save({ validateBeforeSave : true })
 
     console.log(`${req.protocol}://${req.get("host")}${process.env.FORGET_PASSWORD_URL}/${unHashedToken}`);
+
+    await User.findById(req.user._id).select("-password -refreshToken -emailVerificationToken -emailVerificationExpiry")
+
+    await user.save({ validateBeforeSave : true })
 
   return res.status(200).json(new ApiResponse(200, {}, "forget password request send on register email"))
 })
@@ -232,6 +238,8 @@ const resetForgetPassword = asyncHandler(async(req,res)=>{
 
     user.password = newPassword
 
+    await User.findById(req.user._id).select("-password -refreshToken -emailVerificationToken -emailVerificationExpiry")
+
     await  user.save({validateBeforeSave : true})
 
     return res.status(200).json(new ApiResponse(200, {}, "Password change successfully"))
@@ -259,9 +267,16 @@ const addBulkUsers = asyncHandler(async(req,res)=>{
 
      for(const users of parsingdata) {
 
+        console.log("user",users);
+
+
       const { username = "", email = "", password = "", secretkey = "" } = users
 
+      console.log("secretkey :" , secretkey);
       const role = secretKeyUse(secretkey)
+      console.log("role :" , role);
+
+
 
        const emptyFiled = [username,email,password]
        .filter(field => String(field).trim() === "" || field === undefined || field === null)
@@ -280,9 +295,10 @@ const addBulkUsers = asyncHandler(async(req,res)=>{
 
           let insertedUsers = [];
 
-          try { insertedUsers = await User.insertMany(newUserFromClient, { ordered: false });
-
-        } catch (err) { console.error("Insert error:", err.writeErrors);
+          try {
+            insertedUsers = await User.insertMany(newUserFromClient, { ordered: false });
+        } catch (err) {
+          console.error("Insert error:", err.message);
           insertedUsers = err.insertedDocs || [];
         }
            console.log("Inserted Users:", insertedUsers.length);
@@ -300,6 +316,68 @@ const addBulkUsers = asyncHandler(async(req,res)=>{
             "Users add successfully"))
 })
 
+const changeCurrentPassword = asyncHandler(async(req,res)=>{
+
+  const {  oldPassword, newPassword } = req.body
+
+  const user = await User.findById(req.user?._id)
+
+  if([oldPassword, newPassword].some((filed) => String(filed).trim() === "" || filed === undefined || filed === NaN)) {
+    throw new ApiError(400, "both fileds required")
+  }
+
+  const validePassword = await user.isPasswordCorrect(oldPassword)
+
+  if(!validePassword) {
+    throw new ApiError(400, "Invalide credintials")
+  }
+
+  user.password = newPassword
+
+  await User.findById(req.user._id).select("-password -refreshToken -emailVerificationToken -emailVerificationExpiry")
+
+  user.save({validateBeforeSave : true})
+
+    return res.status(200).json(new ApiResponse(200, {}, `${user.role} password change successfully`))
+})
+
+const updateAvatar = asyncHandler(async(req,res)=>{
+
+  const avatar =  req.files?.avatar[0]?.path;
+
+  if(!avatar) {
+    throw new ApiError(400, "Avatar is required")
+  }
+
+  const avatarUrI = await fileupload(avatar)
+
+  if(!avatarUrI) {
+    throw new ApiError(400, "avatar files can't upload")
+  }
+
+
+   await User.findByIdAndUpdate(req.user?._id, {
+      $set : {
+        avatar : avatarUrI.url
+      }
+  }, {save : true}).select("-password -refreshToken -emailVerificationToken -emailVerificationExpiry")
+
+
+    return res.status(200).json(new ApiResponse(200, {}, `${req.user?.role} avatar update successfully`))
+})
+
+const updateUserFiled = asyncHandler(async(req,res)=>{
+
+    await User.findByIdAndUpdate(
+      req.user?._id,
+      req.body ,
+      {
+        new : true, runValidators : true
+      })
+    .select("-password -refreshToken -emailVerificationToken -emailVerificationExpiry")
+
+  return res.status(200).json(new ApiResponse(200, {}, `${req.user.role} user fileds update successfully`))
+})
 
 export {
   addBulkUsers,
@@ -310,5 +388,8 @@ export {
   registerUser,
   resendEmailVerification,
   resetForgetPassword,
-  verifyEmail
+  verifyEmail,
+  changeCurrentPassword,
+  updateAvatar,
+  updateUserFiled
 };

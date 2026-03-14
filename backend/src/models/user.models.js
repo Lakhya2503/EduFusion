@@ -77,13 +77,14 @@ const userSchema = new Schema(
   }, { timestamps : true }
 )
 
-userSchema.pre("insertMany", async function (docs) {
-  for (const doc of docs) {
+userSchema.pre("insertMany", function (next, docs) {
+  docs.forEach(doc => {
     if (doc.password) {
-      doc.password = await bcrypt.hash(doc.password, 10)
+      doc.password = bcrypt.hashSync(doc.password, 10);
     }
-  }
-})
+  });
+  next();
+});
 
 userSchema.pre("save", async function(){
     if(!this.isModified("password")) return;
